@@ -87,7 +87,30 @@ public class NewGame extends State {
     }
 
     private void initScreen3() {
-
+        background_3 = new Sprite("newGameBG3.png", 0, 0, 768, 432);
+        next_3 = new Button("newGameNext3.png", 296, 53, 176, 34);
+        lives = new Button[8];
+        for (int i = 0; i < lives.length; i++) {
+            if (i == 0 || i == 1 || i == 2)
+                lives[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 166 + i*58, 216, 50, 50);
+            if (i == 3)
+                lives[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 166, 158, 50, 50);
+            if (i == 4)
+                lives[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 166 + 58*2, 158, 50, 50);
+            if (i == 5 || i == 6 || i == 7)
+                lives[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 166 + i*58 - 58*5, 100, 50, 50);
+        }
+        births = new Button[8];
+        for (int i = 0; i < births.length; i++) {
+            if (i == 0 || i == 1 || i == 2)
+                births[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 427 + i*58, 216, 50, 50);
+            if (i == 3)
+                births[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 427, 158, 50, 50);
+            if (i == 4)
+                births[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 427 + 58*2, 158, 50, 50);
+            if (i == 5 || i == 6 || i == 7)
+                births[i] = new Button("newGameLifeBirthOff" + i + ".png", "newGameLifeBirthOn" + i + ".png", 427 + i*58 - 58*5, 100, 50, 50);
+        }
     }
 
     @Override
@@ -99,8 +122,8 @@ public class NewGame extends State {
             case 3: handleInputScreen3(); break;
         }
         if (close.isClick(tempDown.x, tempDown.y)) {
-            gsm.set(new StartMenu(gsm));
             tempDown.set(-1, -1, 0);
+            gsm.set(new StartMenu(gsm));
         }
     }
 
@@ -162,7 +185,26 @@ public class NewGame extends State {
     }
 
     private void handleInputScreen3() {
-
+        if (next_3.isClick(tempDown.x, tempDown.y)) {
+            tempDown.set(-1, -1, 0);
+            gsm.set(new Game(gsm, conditionOfLife, conditionOfBirth, activeNeighbors, arenaWidth, arenaHeight));
+        }
+        for (int i = 0; i < lives.length; i++) {
+            if (lives[i].isClick(tempDown.x, tempDown.y)) {
+                lives[i].click();
+                if (lives[i].getIsClick()) conditionOfLife.add(i+1);
+                else conditionOfLife.remove((Integer)(i+1));
+                tempDown.set(-1, -1, 0);
+            }
+        }
+        for (int i = 0; i < births.length; i++) {
+            if (births[i].isClick(tempDown.x, tempDown.y)) {
+                births[i].click();
+                if (births[i].getIsClick()) conditionOfBirth.add(i+1);
+                else conditionOfBirth.remove((Integer)(i+1));
+                tempDown.set(-1, -1, 0);
+            }
+        }
     }
 
     @Override
@@ -210,7 +252,14 @@ public class NewGame extends State {
     }
 
     private void renderScreen3(SpriteBatch sb) {
-
+        background_3.draw(sb);
+        next_3.draw(sb);
+        for (Button life : lives) {
+            life.draw(sb);
+        }
+        for (Button birth : births) {
+            birth.draw(sb);
+        }
     }
 
     @Override
@@ -246,6 +295,13 @@ public class NewGame extends State {
     }
 
     private void disposeScreen3() {
-
+        background_3.dispose();
+        next_3.dispose();
+        for (Button life : lives) {
+            life.dispose();
+        }
+        for (Button birth : births) {
+            birth.dispose();
+        }
     }
 }
