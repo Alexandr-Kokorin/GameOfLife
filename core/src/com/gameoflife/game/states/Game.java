@@ -16,7 +16,7 @@ public class Game extends State {
     private boolean stateOfTheGame, isMultiTouch, isPainting, isErasure;
     private final Button runAndStop, plus, minus, pen, eraser;
 
-    public Game(GameStateManager gsm, ArrayList<Integer> conditionOfLife, ArrayList<Integer> conditionOfBirth, boolean[] activeNeighbors) {
+    public Game(GameStateManager gsm, ArrayList<Integer> conditionOfLife, ArrayList<Integer> conditionOfBirth, boolean[] activeNeighbors, int arenaWidth, int arenaHeight) {
         super(gsm);
         float windowWidth = Gdx.graphics.getWidth();
         float windowHeight = Gdx.graphics.getHeight();
@@ -24,10 +24,10 @@ public class Game extends State {
         dy = windowHeight / 432;
         float dZoom = (dx + dy) / 2;
         camera.setToOrtho(false, windowWidth, windowHeight);
-        camera.position.set((int) (10 * dZoom) * 250, (int) (10 * dZoom) * 250, 0);
+        camera.position.set((int)((10 * dZoom) * arenaWidth/2), (int)((10 * dZoom) * arenaHeight/2), 0);
         camZoom = 1;
         camera.zoom = camZoom;
-        arena = new Arena(500, 500, dZoom, conditionOfLife, conditionOfBirth, activeNeighbors);
+        arena = new Arena(arenaWidth, arenaHeight, dZoom, conditionOfLife, conditionOfBirth, activeNeighbors);
         runAndStop = new Button("start.png", "stop.png", -380 * dx, -212 * dy, 50 * dZoom, 50 * dZoom);
         plus = new Button("plus.png", 380 * dx - 50 * dZoom, 5 * dy, 50 * dZoom, 50 * dZoom);
         minus = new Button("minus.png", 380 * dx - 50 * dZoom, -5 * dy - 50 * dZoom, 50 * dZoom, 50 * dZoom);
