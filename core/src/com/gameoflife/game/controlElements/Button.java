@@ -47,6 +47,10 @@ public class Button {
         isClick = !isClick;
     }
 
+    public boolean getIsClick() {
+        return isClick;
+    }
+
     public void updatePosition(float camPosX, float camPosY) {
         rectangle.x = camPosX + zoomX;
         rectangle.y = camPosY + zoomY;

@@ -28,6 +28,14 @@ public class NewGame extends State {
     private TextField horizontal;
     private TextField vertical;
     private Button[] numbers;
+    // №2
+    private Sprite background_2;
+    private Button[] neighbors;
+    // №3
+    private Sprite background_3;
+    private Button next_3;
+    private Button[] lives;
+    private Button[] births;
 
     public NewGame(GameStateManager gsm) {
         super(gsm);
@@ -64,7 +72,18 @@ public class NewGame extends State {
     }
 
     private void initScreen2() {
-
+        background_2 = new Sprite("newGameBG2.png", 0, 0, 768, 432);
+        neighbors = new Button[8];
+        for (int i = 0; i < neighbors.length; i++) {
+            if (i == 0 || i == 1 || i == 2)
+                neighbors[i] = new Button("newGameNeighborsOff.png", "newGameNeighborsOn.png", 289 + i*67, 245, 57, 57);
+            if (i == 3)
+                neighbors[i] = new Button("newGameNeighborsOff.png", "newGameNeighborsOn.png", 289, 178, 57, 57);
+            if (i == 4)
+                neighbors[i] = new Button("newGameNeighborsOff.png", "newGameNeighborsOn.png", 289 + 67*2, 178, 57, 57);
+            if (i == 5 || i == 6 || i == 7)
+                neighbors[i] = new Button("newGameNeighborsOff.png", "newGameNeighborsOn.png", 289 + i*67 - 67*5, 111, 57, 57);
+        }
     }
 
     private void initScreen3() {
@@ -121,15 +140,25 @@ public class NewGame extends State {
         }
         for (int i = 0; i < numbers.length; i++) {
             if (numbers[i].isClick(tempDown.x, tempDown.y)) {
-                if (horizontal.isActivity()) horizontal.setValue(horizontal.getValue() + i);
-                if (vertical.isActivity()) vertical.setValue(vertical.getValue() + i);
+                if (horizontal.isActivity() && horizontal.getValue().length() < 4) horizontal.setValue(horizontal.getValue() + i);
+                if (vertical.isActivity()  && vertical.getValue().length() < 4) vertical.setValue(vertical.getValue() + i);
                 tempDown.set(-1, -1, 0);
             }
         }
     }
 
     private void handleInputScreen2() {
-
+        if (next_1_2.isClick(tempDown.x, tempDown.y)) {
+            state++;
+            tempDown.set(-1, -1, 0);
+        }
+        for (int i = 0; i < neighbors.length; i++) {
+            if (neighbors[i].isClick(tempDown.x, tempDown.y)) {
+                neighbors[i].click();
+                activeNeighbors[i] = neighbors[i].getIsClick();
+                tempDown.set(-1, -1, 0);
+            }
+        }
     }
 
     private void handleInputScreen3() {
@@ -173,7 +202,11 @@ public class NewGame extends State {
     }
 
     private void renderScreen2(SpriteBatch sb) {
-
+        background_2.draw(sb);
+        next_1_2.draw(sb);
+        for (Button neighbor : neighbors) {
+            neighbor.draw(sb);
+        }
     }
 
     private void renderScreen3(SpriteBatch sb) {
@@ -206,7 +239,10 @@ public class NewGame extends State {
     }
 
     private void disposeScreen2() {
-
+        background_2.dispose();
+        for (Button neighbor : neighbors) {
+            neighbor.dispose();
+        }
     }
 
     private void disposeScreen3() {
